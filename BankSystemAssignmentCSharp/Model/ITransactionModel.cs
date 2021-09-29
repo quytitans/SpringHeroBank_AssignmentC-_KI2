@@ -12,6 +12,7 @@ namespace BankSystemAssignmentCSharp.Model
             string accountNumber,
             string startTime,
             string endTime);
+        TransactionHistory FinByID(string ID);
         List<TransactionHistory> FindAllTransactionHistory();
 
         // thực hiện gửi tiền

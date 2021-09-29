@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Text;
 using BankSystemAssignmentCSharp.Entity;
 using BankSystemAssignmentCSharp.Model;
 using BankSystemAssignmentCSharp.Util;
@@ -130,7 +132,7 @@ namespace BankSystemAssignmentCSharp.Controller
                     }
                 }
             }
-        } //done
+        } //done - tu dong nhan dien loai account user/admin
 
         public void WithDraw(Account accountLogin)
         {
@@ -339,10 +341,28 @@ namespace BankSystemAssignmentCSharp.Controller
         public void CheckTransactionHistory(Account accountLogin)
         {
             Console.WriteLine("Enter the time period to check: ");
-            Console.WriteLine("Start date (dd/MM/yyy): ");
-            var startTime = Console.ReadLine();
-            Console.WriteLine("End date (dd/MM/yyy): ");
-            var endTime = Console.ReadLine();
+            string startTime;
+            string endTime;
+            var loop1 = true;
+            do
+            {
+                Console.WriteLine("Start date (dd/MM/yyy): ");
+                startTime = Console.ReadLine();
+                var check1 = ValidateInput.isDateTimeFormat(startTime);
+                Console.WriteLine("End date (dd/MM/yyy): ");
+                endTime = Console.ReadLine();
+                var check2 = ValidateInput.isDateTimeFormat(endTime);
+                if (check1 == true && check2 == true)
+                {
+                    loop1 = false;
+                }
+                else
+                {
+                    loop1 = true;
+                    Console.WriteLine("Please enter datetime format // example: 30/01/1992");
+                }
+            } while (loop1);
+
             var listResult =
                 TransactionModel.FindTransactionHistoryByAccountNumber(accountLogin.AccountNumber, startTime, endTime);
             if (listResult != null)
@@ -379,8 +399,28 @@ namespace BankSystemAssignmentCSharp.Controller
                 {
                     Console.WriteLine(VARIABLE.ToString());
                 }
+
                 Console.WriteLine(
                     "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            }
+        }
+
+        public void ReadFileTXT(string link)
+        {
+            Console.OutputEncoding = Encoding.Unicode;
+            string[] lines;
+
+            if (File.Exists(link))
+            {
+                lines = File.ReadAllLines(link);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    Console.WriteLine("{0}", lines[i]);
+                }
+            }
+            else
+            {
+                Console.WriteLine("File does not exist");
             }
         }
 

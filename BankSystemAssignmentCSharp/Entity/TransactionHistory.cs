@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using BankSystemAssignmentCSharp.Model;
 using BankSystemAssignmentCSharp.Util;
 
 namespace BankSystemAssignmentCSharp.Entity
@@ -105,7 +107,14 @@ namespace BankSystemAssignmentCSharp.Entity
         public TransactionHistory(string senderAccountNumber, string receiverAccountNumber, int type, double amount,
             string message)
         {
-            ID = Guid.NewGuid().ToString();
+            TransactionHistory check;
+            do
+            {
+                ID = Guid.NewGuid().ToString();
+                TransactionModel transactionModel = new TransactionModel();
+                check = transactionModel.FinByID(ID);
+
+            } while (check != null);
             SenderAccountNumber = senderAccountNumber;
             ReceiverAccountNumber = receiverAccountNumber;
             Type = type;

@@ -17,19 +17,31 @@ namespace BankSystemAssignmentCSharp.View
                 Console.WriteLine("please select: ");
                 Console.WriteLine("1 - View SHB bank information");
                 Console.WriteLine("2 - Customer incentive programs");
-                Console.WriteLine("3 - Login");
+                Console.WriteLine("3 - Login");//done
                 Console.WriteLine("4 - Register New Customer Account"); //done
-                Console.WriteLine("5 - Register New Admin Account");
-                Console.WriteLine("0 - Exit");
+                Console.WriteLine("5 - Register New Admin Account");//done
+                Console.WriteLine("0 - Exit"); //done
                 Console.WriteLine("--------------------------------------");
                 var choice = Int32.Parse(Console.ReadLine());
                 switch (@choice)
                 {
                     case 1:
                         Console.WriteLine("View SHB bank information");
+                        UserController userController1 = new UserController();
+                        const string filePath = "../../Storage/SHBbank.txt";
+                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
+                        userController1.ReadFileTXT(filePath);
+                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
+                        Console.ReadLine();
                         break;
                     case 2:
                         Console.WriteLine("Customer incentive programs");
+                        UserController userController2 = new UserController();
+                        const string filePath1 = "../../Storage/SHBnews.txt";
+                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
+                        userController2.ReadFileTXT(filePath1);
+                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
+                        Console.ReadLine();
                         break;
                     case 3:
                         Console.WriteLine("--------------------LOGIN--------------------");

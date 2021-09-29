@@ -83,6 +83,41 @@ namespace BankSystemAssignmentCSharp.Model
             return transactionHistoriesList;
         }
 
+        public TransactionHistory FinByID(string ID)
+        {
+            TransactionHistory transactionHistory1 = new TransactionHistory();
+            using (var cnn = ConnectionHelperCSharp.GetConnection())
+            {
+                cnn.Open();
+                MySqlCommand mySqlCommand =
+                    new MySqlCommand(
+                        $"select * from transactionhistory where ID  = '{ID}'", cnn);
+                var result = mySqlCommand.ExecuteReader();
+                if (result == null)
+                {
+                    return null;
+                }
+
+                if (result.Read())
+                {
+                    TransactionHistory transactionHistory = new TransactionHistory();
+                    transactionHistory.ID = result.GetString("ID");
+                    transactionHistory.SenderAccountNumber = result.GetString("SenderAccountNumber");
+                    transactionHistory.ReceiverAccountNumber = result.GetString("ReceiverAccountNumber");
+                    transactionHistory.Type = result.GetInt32("Type");
+                    transactionHistory.Amount = result.GetDouble("Amount");
+                    transactionHistory.Message = result.GetString("Message");
+                    transactionHistory.CreateAt = result.GetInt64("CreateAt");
+                    transactionHistory.UpdateAt = result.GetInt64("UpdateAt");
+                    transactionHistory.DeleteAt = result.GetInt64("DeleteAt");
+                    transactionHistory.Status = result.GetInt32("Status");
+                    return transactionHistory;
+                }
+            }
+
+            return null;
+        }
+
         public List<TransactionHistory> FindAllTransactionHistory()
         {
             List<TransactionHistory> transactionHistoriesList = new List<TransactionHistory>();

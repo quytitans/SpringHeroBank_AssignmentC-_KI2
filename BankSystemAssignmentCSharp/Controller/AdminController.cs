@@ -67,7 +67,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 newAcc = GetAdminInfo();
                 newAcc.Id = accountLogin.Id;
                 newAcc.CreateAt = accountLogin.CreateAt;
-                newAcc.DeleteAt = accountLogin.CreateAt;
+                newAcc.DeleteAt = accountLogin.DeleteAt;
                 newAcc.Status = accountLogin.Status;
                 var Errors = ValidateInput.IsValidRegisterAdmin(newAcc);
                 if (Errors.Count > 0)
@@ -173,6 +173,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 {
                     Console.WriteLine(VARIABLE.ToString());
                 }
+
                 Console.WriteLine(
                     "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }
@@ -328,10 +329,28 @@ namespace BankSystemAssignmentCSharp.Controller
             Console.WriteLine("Enter account number you want to check:");
             var accountCheck = Console.ReadLine();
             Console.WriteLine("Enter the time period to check: ");
-            Console.WriteLine("Start date (dd/MM/yyy): ");
-            var startTime = Console.ReadLine();
-            Console.WriteLine("End date (dd/MM/yyy): ");
-            var endTime = Console.ReadLine();
+            string startTime;
+            string endTime;
+            var loop1 = true;
+            do
+            {
+                Console.WriteLine("Start date (dd/MM/yyy): ");
+                startTime = Console.ReadLine();
+                var check1 = ValidateInput.isDateTimeFormat(startTime);
+                Console.WriteLine("End date (dd/MM/yyy): ");
+                endTime = Console.ReadLine();
+                var check2 = ValidateInput.isDateTimeFormat(endTime);
+                if (check1 == true && check2 == true)
+                {
+                    loop1 = false;
+                }
+                else
+                {
+                    loop1 = true;
+                    Console.WriteLine("Please enter datetime format // example: 30/01/1992");
+                }
+            } while (loop1);
+
             var listResult =
                 transactionModel.FindTransactionHistoryByAccountNumber(accountCheck, startTime, endTime);
             if (listResult != null)
@@ -369,6 +388,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 {
                     Console.WriteLine(VARIABLE.ToString());
                 }
+
                 Console.WriteLine(
                     "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }

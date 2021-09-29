@@ -38,5 +38,6 @@ namespace BankSystemAssignmentCSharp.Controller
         void LockAccount(Account accountLogin);
         void CheckTransactionHistory(Account accountLogin);
         void ShowAllUserAccount();
+        void ReadFileTXT(string link);
     }
 }

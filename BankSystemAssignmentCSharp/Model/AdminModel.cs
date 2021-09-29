@@ -232,6 +232,17 @@ namespace BankSystemAssignmentCSharp.Model
             else
             {
                 result.Status = newStatus;
+                if (newStatus != -1)
+                {
+                    result.DeleteAt = 0;
+                    result.UpdateAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                }
+
+                if (newStatus == -1)
+                {
+                    result.DeleteAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                }
+
                 var result2 = accountModel.Update(result.AccountNumber, result);
                 if (result2)
                 {

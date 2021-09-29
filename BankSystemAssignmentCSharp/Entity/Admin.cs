@@ -1,4 +1,5 @@
 ﻿using System;
+using BankSystemAssignmentCSharp.Model;
 using BankSystemAssignmentCSharp.Util;
 using SpringHeroBank.utility;
 
@@ -83,7 +84,13 @@ namespace BankSystemAssignmentCSharp.Entity
         public Admin(string username, string password, string confirmPassword,
             string fullName, string phone)
         {
-            Id = Guid.NewGuid().ToString(); //xu ly them khi co ham find admin by id
+            Admin check;
+            do
+            {
+                Id = Guid.NewGuid().ToString(); //xu ly them khi co ham find admin by id
+                AdminModel adminModel = new AdminModel();
+                check = adminModel.FindById(Id);
+            } while (check != null);
             Username = username;
             Salt = Hash.RandomString(6);
             Password = password;
