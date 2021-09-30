@@ -115,6 +115,7 @@
         <Compile Include="Util\ConnectionHelperCSharp.cs" />
         <Compile Include="Util\ConvertMilisecondToStringDateTime.cs" />
         <Compile Include="Util\ConvertStringDateTimeToMilisecond.cs" />
+        <Compile Include="Util\ExtendMethodGeneral.cs" />
         <Compile Include="Util\Hash.cs" />
         <Compile Include="Util\ValidateInput.cs" />
         <Compile Include="View\AdminModeMenu.cs" />

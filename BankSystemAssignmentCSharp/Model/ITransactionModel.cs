@@ -11,9 +11,12 @@ namespace BankSystemAssignmentCSharp.Model
         List<TransactionHistory> FindTransactionHistoryByAccountNumber(
             string accountNumber,
             string startTime,
-            string endTime);
+            string endTime, 
+            int offset, 
+            int limit);
         TransactionHistory FinByID(string ID);
-        List<TransactionHistory> FindAllTransactionHistory();
+        List<TransactionHistory> FindAllTransactionHistory(int offset, int limit);
+        int CountNumberOffTransactionHistory();
 
         // thực hiện gửi tiền
         TransactionHistory Deposit(string accountNumber, double amount);

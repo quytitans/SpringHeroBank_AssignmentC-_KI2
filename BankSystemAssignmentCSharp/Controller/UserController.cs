@@ -363,46 +363,138 @@ namespace BankSystemAssignmentCSharp.Controller
                 }
             } while (loop1);
 
-            var listResult =
-                TransactionModel.FindTransactionHistoryByAccountNumber(accountLogin.AccountNumber, startTime, endTime);
-            if (listResult != null)
+            //end step 1
+            TransactionModel transactionModel = new TransactionModel();
+            ConsoleKeyInfo key = new ConsoleKeyInfo();
+            var offset = 0;
+            var limit = 10;
+            do
             {
-                Console.WriteLine($"Your transaction history from {startTime} to {endTime}: ");
-                Console.WriteLine(
-                    $"{"ID",40}{" |",2}{"SenderAccountNumber",40}{" |",2}{"ReceiverAccountNumber",40}{" |",2}{"Type",8}{" |",2}{"Amount",10}{" |",2}{"Message",28}{" |",2}{"CreateAt",13}{" |",2}{"Status",7}");
-                Console.WriteLine(
-                    "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                foreach (var VARIABLE in listResult)
+                var page = offset / limit + 1;
+                var totalPage = 0;
+                if (transactionModel.CountNumberOffTransactionHistory() % limit == 0)
                 {
-                    Console.WriteLine(VARIABLE.ToString());
+                    totalPage = transactionModel.CountNumberOffTransactionHistory() / limit;
+                }
+                else
+                {
+                    totalPage = transactionModel.CountNumberOffTransactionHistory() / limit + 1;
+                }
+                var result =
+                    TransactionModel.FindTransactionHistoryByAccountNumber(accountLogin.AccountNumber, startTime,
+                        endTime, offset, limit);
+                if (result != null)
+                {
+                    Console.WriteLine($"Your transaction history from {startTime} to {endTime}: ");
+                    result.Display();
+                    Console.WriteLine($"<<Back-- Page: {page}/{totalPage} --Next>>");
+                    Console.WriteLine("Press DownArrow to escape");
                 }
 
-                Console.WriteLine(
-                    "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            }
+                if (result == null)
+                {
+                    Console.WriteLine("Account list is empty");
+                }
+
+                key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.RightArrow:
+                        if (page < totalPage)
+                        {
+                            offset += limit;
+                        }
+
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        if (page > 1)
+                        {
+                            offset -= limit;
+                        }
+
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        Console.WriteLine("Close view, enter for more selection");
+                        break;
+
+                    default:
+                        if (Console.CapsLock && Console.NumberLock)
+                        {
+                            Console.WriteLine(key.KeyChar);
+                        }
+
+                        break;
+                }
+            } while (!Console.KeyAvailable && key.Key != ConsoleKey.DownArrow);
         } //done
 
         public void ShowAllUserAccount()
         {
-            var results = accountModel.FindAll();
-            if (results == null)
+            AccountModel accountModel = new AccountModel();
+            ConsoleKeyInfo key = new ConsoleKeyInfo();
+            var offset = 0;
+            var limit = 5;
+            do
             {
-                Console.WriteLine("There are no user accounts");
-            }
-            else
-            {
-                Console.WriteLine(
-                    $"{"AccountNumber",40}{"|",2}{"Balance",15}{"|",2}{"Username",15}{"|",2}{"Lock",5}{"|",2}{"FirstName",10}{"|",2}{"LastName",10}{"|",2}{"IdentityNumber",18}{"|",2}{"Phone",17}{"|",2}{"CreateAt",15}{"|",2}{"UpdateAt",15}{"|",2}{"DeleteAt",15}{"|",2}{"Status",5}");
-                Console.WriteLine(
-                    "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                foreach (var VARIABLE in results)
+                var page = offset / limit + 1;
+                var totalPage = 0;
+                if (accountModel.CountAllAccount() % limit == 0)
                 {
-                    Console.WriteLine(VARIABLE.ToString());
+                    totalPage = accountModel.CountAllAccount() / limit;
+                }
+                else
+                {
+                    totalPage = accountModel.CountAllAccount() / limit + 1;
+                }
+                var result = accountModel.FindAll(offset, limit);
+
+                if (result == null)
+                {
+                    Console.WriteLine("Account list is empty");
+                }
+                else
+                {
+                    result.Display();
                 }
 
-                Console.WriteLine(
-                    "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            }
+                Console.WriteLine($"<<Back-- Page: {page}/{totalPage} --Next>>");
+                Console.WriteLine("Press DownArrow to escape");
+                key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.RightArrow:
+                        if (page < totalPage)
+                        {
+                            offset += limit;
+                        }
+
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        if (page > 1)
+                        {
+                            offset -= limit;
+                        }
+
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        Console.WriteLine("Close view, enter for more selection");
+                        break;
+
+                    default:
+                        if (Console.CapsLock && Console.NumberLock)
+                        {
+                            Console.WriteLine(key.KeyChar);
+                        }
+
+                        break;
+                }
+            } while (!Console.KeyAvailable && key.Key != ConsoleKey.DownArrow);
         }
 
         public void ReadFileTXT(string link)
@@ -413,10 +505,15 @@ namespace BankSystemAssignmentCSharp.Controller
             if (File.Exists(link))
             {
                 lines = File.ReadAllLines(link);
+                Console.WriteLine(
+                    "------------------------------------------------------------------------------------------------------------------------------------");
                 for (int i = 0; i < lines.Length; i++)
                 {
                     Console.WriteLine("{0}", lines[i]);
                 }
+
+                Console.WriteLine(
+                    "------------------------------------------------------------------------------------------------------------------------------------");
             }
             else
             {

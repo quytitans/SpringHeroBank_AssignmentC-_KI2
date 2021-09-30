@@ -264,13 +264,13 @@ namespace BankSystemAssignmentCSharp.Model
             return null;
         } //done
 
-        public List<Account> FindAll()
+        public List<Account> FindAll(int offset, int limit)
         {
             List<Account> listAcc = new List<Account>();
             using (var cnn = ConnectionHelperCSharp.GetConnection())
             {
                 cnn.Open();
-                MySqlCommand mySqlCommand = new MySqlCommand("select * from bankdatabase", cnn);
+                MySqlCommand mySqlCommand = new MySqlCommand($"select * from bankdatabase LIMIT {limit} OFFSET {offset}", cnn);
                 var result = mySqlCommand.ExecuteReader();
                 if (result == null)
                 {
@@ -303,7 +303,29 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return listAcc;
-        } //Done
+        }
+
+        public int CountAllAccount()
+        {
+            int count=0;
+            using (var cnn = ConnectionHelperCSharp.GetConnection())
+            {
+                cnn.Open();
+                MySqlCommand mySqlCommand = new MySqlCommand("select * from bankdatabase", cnn);
+                var result = mySqlCommand.ExecuteReader();
+                if (result == null)
+                {
+                    return 0;
+                }
+
+                while (result.Read())
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+        //Done
 
         public List<Account> SearchByPhone(string keyword)
         {
@@ -411,7 +433,7 @@ namespace BankSystemAssignmentCSharp.Model
             return null;
         } //Done
 
-        public List<Account> SearchByStatus(int status)
+        public List<Account> SearchByStatus(int status, int offset, int limit)
         {
             List<Account> lisAcc = new List<Account>();
             try
@@ -419,7 +441,7 @@ namespace BankSystemAssignmentCSharp.Model
                 using (var cnn = ConnectionHelperCSharp.GetConnection())
                 {
                     cnn.Open();
-                    string strQuerry = $"select * from bankdatabase where Status = {status}";
+                    string strQuerry = $"select * from bankdatabase where Status = {status} LIMIT {limit} OFFSET {offset}";
                     MySqlCommand mySqlCommand = new MySqlCommand(strQuerry, cnn);
                     var result = mySqlCommand.ExecuteReader();
                     if (result == null)
@@ -462,6 +484,41 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return null;
-        } //Done
+        }
+
+        public int CountUserByStatus(int status)
+        {
+            try
+            {
+                using (var cnn = ConnectionHelperCSharp.GetConnection())
+                {
+                    cnn.Open();
+                    string strQuerry = $"select * from bankdatabase where Status = {status}";
+                    MySqlCommand mySqlCommand = new MySqlCommand(strQuerry, cnn);
+                    var result = mySqlCommand.ExecuteReader();
+                    var count = 0;
+                    if (result == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        while (result.Read())
+                        {
+                            count++;
+                        }
+
+                        return count;
+                    }
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return 0;
+        }
+        //Done
     }
 }

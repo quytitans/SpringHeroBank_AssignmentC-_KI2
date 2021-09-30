@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using BankSystemAssignmentCSharp.Controller;
 using BankSystemAssignmentCSharp.Entity;
+using BankSystemAssignmentCSharp.Util;
 
 namespace BankSystemAssignmentCSharp.View
 {
@@ -22,25 +23,21 @@ namespace BankSystemAssignmentCSharp.View
                 Console.WriteLine("5 - Register New Admin Account");//done
                 Console.WriteLine("0 - Exit"); //done
                 Console.WriteLine("--------------------------------------");
-                var choice = Int32.Parse(Console.ReadLine());
+                var choice = getChoice();
                 switch (@choice)
                 {
                     case 1:
                         Console.WriteLine("View SHB bank information");
                         UserController userController1 = new UserController();
                         const string filePath = "../../Storage/SHBbank.txt";
-                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
                         userController1.ReadFileTXT(filePath);
-                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
                         Console.ReadLine();
                         break;
                     case 2:
                         Console.WriteLine("Customer incentive programs");
                         UserController userController2 = new UserController();
                         const string filePath1 = "../../Storage/SHBnews.txt";
-                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
                         userController2.ReadFileTXT(filePath1);
-                        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------");
                         Console.ReadLine();
                         break;
                     case 3:
@@ -84,21 +81,21 @@ namespace BankSystemAssignmentCSharp.View
                 Console.WriteLine($"Welcom Admin {accountLogin.FullName} comeback");
                 Console.WriteLine("please select: ");
                 Console.WriteLine("1 - Your detail information"); //done
-                Console.WriteLine("2 - Approve account inactive"); //done
+                Console.WriteLine("2 - Approve account inactive"); 
                 Console.WriteLine("3 - Change user account status"); //done
-                Console.WriteLine("4 - Show list account (Active, Inactive/Waiting Approve, Deleted)"); //done
+                Console.WriteLine("4 - Show list account (Active, Inactive/Waiting Approve, Deleted)"); // PHAN TRANG
                 Console.WriteLine("5 - Find User info by ACCOUNT's NUMBER"); //done
                 Console.WriteLine("6 - Find User info by USER's NAME"); //done
                 Console.WriteLine("7 - Find User info by ACCOUNT's PHONE"); //done
-                Console.WriteLine("8 - Check User's transaction history"); //done
+                Console.WriteLine("8 - Check User's transaction history"); // PHAN TRANG
                 Console.WriteLine("9 - Add new User Account"); //done
-                Console.WriteLine("10 - Show users list"); //done
-                Console.WriteLine("11 - Show TransactionHistory list"); //done
+                Console.WriteLine("10 - Show users list"); // PHAN TRANG
+                Console.WriteLine("11 - Show TransactionHistory list"); // PHAN TRANG
                 Console.WriteLine("12 - Change Your Information"); //done
                 Console.WriteLine("13 - Change Your Password"); //done
                 Console.WriteLine("0 - Back");
                 Console.WriteLine("--------------------------------------");
-                var choice = Int32.Parse(Console.ReadLine());
+                var choice = getChoice();
                 switch (@choice)
                 {
                     case 1:
@@ -203,13 +200,13 @@ namespace BankSystemAssignmentCSharp.View
                 Console.WriteLine("3 - Deposit"); //done
                 Console.WriteLine("4 - Withdraw"); //done
                 Console.WriteLine("5 - Transfer"); //done
-                Console.WriteLine("6 - Check transaction history"); //done
+                Console.WriteLine("6 - Check transaction history"); // PHAN TRANG
                 Console.WriteLine("7 - Lock/Unlock account transaction"); //done
                 Console.WriteLine("8 - Edit account's information"); //done
                 Console.WriteLine("9 - Change password"); //done
                 Console.WriteLine("0 - Back"); //done
                 Console.WriteLine("--------------------------------------");
-                var choice = Int32.Parse(Console.ReadLine());
+                var choice = getChoice();
                 switch (@choice)
                 {
                     case 1:
@@ -265,6 +262,23 @@ namespace BankSystemAssignmentCSharp.View
                     break;
                 }
             }
+        }
+
+        public static int getChoice()
+        {
+            string strChoice = "abc";
+            int choice = 100;
+            while (!CheckintergerValue.IsIntergerValue(strChoice))
+            {
+                Console.WriteLine("Enter your choice: ");
+                strChoice = Console.ReadLine();
+                    
+            }
+            if (CheckintergerValue.IsIntergerValue(strChoice))
+            {
+                return choice = Int32.Parse(strChoice);  
+            }
+            return default;
         }
     }
 }

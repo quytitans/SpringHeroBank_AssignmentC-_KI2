@@ -32,7 +32,7 @@ namespace BankSystemAssignmentCSharp.Model
         } //done
 
         public List<TransactionHistory> FindTransactionHistoryByAccountNumber(string accountNumber, string startTime,
-            string endTime)
+            string endTime, int offset, int limit)
         {
             List<TransactionHistory> transactionHistoriesList = new List<TransactionHistory>();
             var startTimeConverted = ConvertStringDateTimeToMilisecond.ToMiliSecond(startTime);
@@ -55,7 +55,7 @@ namespace BankSystemAssignmentCSharp.Model
                     new MySqlCommand(
                         $"select * from transactionhistory where " +
                         $"SenderAccountNumber = '{accountNumber}' and " +
-                        $"CreateAt >= {startTimeConverted} and CreateAt <= {endTimeConverted}",
+                        $"CreateAt >= {startTimeConverted} and CreateAt <= {endTimeConverted} LIMIT {limit} OFFSET {offset}",
                         cnn);
                 var result = mySqlCommand.ExecuteReader();
                 if (result == null)
@@ -118,7 +118,7 @@ namespace BankSystemAssignmentCSharp.Model
             return null;
         }
 
-        public List<TransactionHistory> FindAllTransactionHistory()
+        public List<TransactionHistory> FindAllTransactionHistory(int offset, int limit)
         {
             List<TransactionHistory> transactionHistoriesList = new List<TransactionHistory>();
             using (var cnn = ConnectionHelperCSharp.GetConnection())
@@ -126,7 +126,7 @@ namespace BankSystemAssignmentCSharp.Model
                 cnn.Open();
                 MySqlCommand mySqlCommand =
                     new MySqlCommand(
-                        $"select * from transactionhistory",
+                        $"select * from transactionhistory LIMIT {limit} OFFSET {offset}",
                         cnn);
                 var result = mySqlCommand.ExecuteReader();
                 if (result == null)
@@ -152,6 +152,31 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return transactionHistoriesList;
+        }
+
+        public int CountNumberOffTransactionHistory()
+        {
+            var count = 0;
+            using (var cnn = ConnectionHelperCSharp.GetConnection())
+            {
+                cnn.Open();
+                MySqlCommand mySqlCommand =
+                    new MySqlCommand(
+                        $"select * from transactionhistory",
+                        cnn);
+                var result = mySqlCommand.ExecuteReader();
+                if (result == null)
+                {
+                    return 0;
+                }
+
+                while (result.Read())
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
         //done
 
