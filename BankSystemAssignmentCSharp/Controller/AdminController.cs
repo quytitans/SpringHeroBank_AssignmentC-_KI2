@@ -35,14 +35,14 @@ namespace BankSystemAssignmentCSharp.Controller
             if (result)
             {
                 Console.WriteLine("saved new account success !!!");
+                return newAcc;
             }
             else
             {
                 Console.WriteLine("saving false, please try again !!!!");
+                return null;
             }
-
-            return newAcc;
-        } //done
+        }
 
         public void CheckInformation(Admin accountLogin)
         {
@@ -131,7 +131,6 @@ namespace BankSystemAssignmentCSharp.Controller
                 Console.WriteLine("Current password is not true, please try again !!!");
             }
         }
-        //done
 
         public void FindUserByAccountNumber()
         {
@@ -163,17 +162,15 @@ namespace BankSystemAssignmentCSharp.Controller
             Console.WriteLine("Enter User's LastName: ");
             var lastName = Console.ReadLine();
             var result = accountModel.FindByName(firstName, lastName);
-            if (result != null)
-            {
-                result.Display();
-            }
-
-            if (result == null)
+            if (result.Count == 0)
             {
                 Console.WriteLine("This user is not exist, please try again");
             }
+            if(result != null && result.Count != 0)
+            {
+                result.Display();
+            }
         }
-        //done
 
         public void FindUserByStatus(int status)
         {
@@ -242,8 +239,7 @@ namespace BankSystemAssignmentCSharp.Controller
                         break;
                 }
             } while (!Console.KeyAvailable && key.Key != ConsoleKey.DownArrow);
-        } //done
-
+        } 
         public void ViewListUserByStatus()
         {
             Console.WriteLine("List account by status you want to see:");
@@ -268,7 +264,7 @@ namespace BankSystemAssignmentCSharp.Controller
                     Console.WriteLine("Please choose from 1 to 3 option");
                     break;
             }
-        } //done
+        } 
 
         public void ChangeUserStatus()
         {
@@ -311,7 +307,73 @@ namespace BankSystemAssignmentCSharp.Controller
             {
                 Console.WriteLine("This Accountnumber is not exist, please try again!!!");
             }
-        } //done
+        } 
+
+        public void ChangeLockTransaction()
+        {
+            Console.WriteLine("Enter Account number you want to process: ");
+            var activeAccountNumber1 = Console.ReadLine();
+            AccountModel accountModel = new AccountModel();
+            var checkAcc = accountModel.FindById(activeAccountNumber1);
+            if (checkAcc == null)
+            {
+                Console.WriteLine("This Accountnumber is not exist, please try again!!!");
+            }
+
+            if (checkAcc.LockTransaction == 1)
+            {
+                Console.WriteLine("Your account transaction is locked, do you want to open it ? (yes/no)");
+                var choice2 = Console.ReadLine();
+                if (choice2.Equals("yes") || choice2.Equals("YES") || choice2.Equals("Yes"))
+                {
+                    checkAcc.LockTransaction = 0;
+                    var result = accountModel.Update(checkAcc.AccountNumber, checkAcc);
+                    if (result)
+                    {
+                        Console.WriteLine("Change transaction status complete!!!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Change transaction status false!!!");
+                    }
+
+                    return;
+                }
+
+                if (choice2.Equals("No") || choice2.Equals("no") || choice2.Equals("NO"))
+                {
+                    Console.WriteLine("Canceled!!!");
+                    return;
+                }
+            }
+
+            if (checkAcc.LockTransaction == 0)
+            {
+                Console.WriteLine("Your account transaction is open, do you want to lock it ?");
+                var choice = Console.ReadLine();
+                if (choice.Equals("yes") || choice.Equals("YES") || choice.Equals("Yes"))
+                {
+                    checkAcc.LockTransaction = 1;
+                    var result = accountModel.Update(checkAcc.AccountNumber, checkAcc);
+                    if (result)
+                    {
+                        Console.WriteLine("Change transaction status complete!!!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Change transaction status false!!!");
+                    }
+
+                    return;
+                }
+
+                if (choice.Equals("No") || choice.Equals("no") || choice.Equals("NO"))
+                {
+                    Console.WriteLine("Canceled!!!");
+                    return;
+                }
+            }
+        } 
 
         public void SearchUserByPhone()
         {
@@ -327,7 +389,7 @@ namespace BankSystemAssignmentCSharp.Controller
             {
                 Console.WriteLine("This phone number is not exist, please try again");
             }
-        } //done
+        }
 
         public void SearchUserByIndentityNumber()
         {
@@ -343,7 +405,7 @@ namespace BankSystemAssignmentCSharp.Controller
             {
                 Console.WriteLine("This IndentityNumber is not exist, please try again");
             }
-        } //done
+        } 
 
         public void SearchUserByTransactionHistory()
         {
@@ -381,14 +443,17 @@ namespace BankSystemAssignmentCSharp.Controller
             {
                 var page = offset / limit + 1;
                 var totalPage = 0;
-                if (transactionModel1.CountNumberOffTransactionHistory() % limit == 0)
+                if (transactionModel1.CountNumberOffTransactionHistory(accountCheck, startTime, endTime) % limit == 0)
                 {
-                    totalPage = transactionModel1.CountNumberOffTransactionHistory() / limit;
+                    totalPage = transactionModel1.CountNumberOffTransactionHistory(accountCheck, startTime, endTime) /
+                                limit;
                 }
                 else
                 {
-                    totalPage = transactionModel1.CountNumberOffTransactionHistory() / limit + 1;
+                    totalPage = transactionModel1.CountNumberOffTransactionHistory(accountCheck, startTime, endTime) /
+                        limit + 1;
                 }
+
                 var result =
                     transactionModel1.FindTransactionHistoryByAccountNumber(accountCheck, startTime,
                         endTime, offset, limit);
@@ -402,7 +467,9 @@ namespace BankSystemAssignmentCSharp.Controller
 
                 if (result == null)
                 {
-                    Console.WriteLine("Account list is empty");
+                    Console.WriteLine(
+                        "Account's TransactionHistory list is empty, please check account number or time period again !!!");
+                    break;
                 }
 
                 key = Console.ReadKey(true);
@@ -458,6 +525,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 {
                     totalPage = transactionModel.CountNumberOffTransactionHistory() / limit + 1;
                 }
+
                 var result = transactionModel.FindAllTransactionHistory(offset, limit);
 
                 if (result == null)

@@ -56,7 +56,7 @@ namespace BankSystemAssignmentCSharp.Entity
         }
 
         public int Status { get; set; }
-        
+
         //convert milisecond to string date time format
         public string strCreateAt()
         {
@@ -92,7 +92,7 @@ namespace BankSystemAssignmentCSharp.Entity
 
         public string strStatus()
         {
-            if (Status ==1)
+            if (Status == 1)
             {
                 return "Active";
             }
@@ -111,9 +111,6 @@ namespace BankSystemAssignmentCSharp.Entity
                 return "Null";
             }
         }
-        
-        
-        
 
         //end convert block
         public Account(string username, string password, string confirmpassword
@@ -146,9 +143,8 @@ namespace BankSystemAssignmentCSharp.Entity
             CreateAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             UpdateAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             DeleteAt = 0;
-            Status = 0; //1 là active, 2 là khóa, -1 là deleted, 0 : chuakichhoat
+            Status = 0; //1 là active, 2 là khoa, -1 là deleted, 0 : chua kich hoat
         }
-
 
         public Account()
         {
@@ -157,7 +153,7 @@ namespace BankSystemAssignmentCSharp.Entity
         public override string ToString()
         {
             return
-                $"{AccountNumber,40}{ "|",2}{Balance,15}{ "|",2}{Username,15}{ "|",2}{strLockTransaction(),5}{ "|",2}{FirstName,10}{ "|",2}{LastName,10}{ "|",2}{IdentityNumber,18}{ "|",2}{Phone,17}{ "|",2}{strCreateAt(),15}{ "|",2}{strUpdateAt(),15}{ "|",2}{strDeleteAt(),15}{ "|",2}{strStatus(),8}";
+                $"{AccountNumber,40}{"|",2}{Balance,15}{"|",2}{Username,15}{"|",2}{strLockTransaction(),5}{"|",2}{FirstName,10}{"|",2}{LastName,10}{"|",2}{IdentityNumber,18}{"|",2}{Phone,17}{"|",2}{strCreateAt(),15}{"|",2}{strUpdateAt(),15}{"|",2}{strDeleteAt(),15}{"|",2}{strStatus(),8}";
         }
 
         private string ProcessHashPassword(string pass, string salt1)

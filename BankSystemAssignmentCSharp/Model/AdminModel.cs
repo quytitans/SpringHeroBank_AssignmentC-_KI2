@@ -10,8 +10,15 @@ namespace BankSystemAssignmentCSharp.Model
     {
         public bool Save(Admin account)
         {
+            AccountModel accountModel = new AccountModel();
             var checkExist = FindByUsername(account.Username);
             if (checkExist != null)
+            {
+                Console.WriteLine("Username already exist !!! Please try again !!!");
+                return false;
+            }
+            var checkExist2 = accountModel.FindByUsername(account.Username);
+            if (checkExist2 != null)
             {
                 Console.WriteLine("Username already exist !!! Please try again !!!");
                 return false;
@@ -33,7 +40,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return false;
-        } //done
+        }
 
         public bool Update(string id, Admin updateAccount)
         {
@@ -41,6 +48,22 @@ namespace BankSystemAssignmentCSharp.Model
             if (checkExist == null)
             {
                 Console.WriteLine("This ID is not exist, please try again !!!");
+                return false;
+            }
+
+            AccountModel accountModel = new AccountModel();
+            var checkExist3 = FindByUsername(updateAccount.Username);
+            //check ton tai trong bang admin
+            if (checkExist3 != null)
+            {
+                Console.WriteLine("Username already exist !!! Please try again !!!");
+                return false;
+            }
+            //check ton tai trong bang user
+            var checkExist2 = accountModel.FindByUsername(updateAccount.Username);
+            if (checkExist2 != null)
+            {
+                Console.WriteLine("Username already exist !!! Please try again !!!");
                 return false;
             }
 
@@ -69,7 +92,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return false;
-        } //done
+        } 
 
         public bool Delete(string id)
         {
@@ -93,7 +116,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return false;
-        } //done
+        } 
 
         public Admin FindById(string id)
         {
@@ -128,7 +151,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return null;
-        } //done
+        } 
 
         public Admin FindByUsername(string Username1)
         {
@@ -163,7 +186,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return null;
-        } // done
+        } 
 
         public List<Admin> FindAll()
         {
@@ -196,9 +219,8 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return listAcc;
-        } //done
+        } 
 
-        //tuong tac voi tai khoan nguoi dung, thay doi trang thai
         private AccountModel accountModel = new AccountModel();
 
         //thay doi cho phep/khong cho phep giao dich

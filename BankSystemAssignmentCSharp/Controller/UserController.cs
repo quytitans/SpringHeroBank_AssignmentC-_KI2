@@ -40,14 +40,14 @@ namespace BankSystemAssignmentCSharp.Controller
             if (result)
             {
                 Console.WriteLine("saved new account success !!!");
+                return newAcc;
             }
             else
             {
                 Console.WriteLine("saving false, please try again !!!!");
+                return null;
             }
-
-            return newAcc;
-        } //done
+        }
 
         public void ShowBankInformation()
         {
@@ -132,7 +132,7 @@ namespace BankSystemAssignmentCSharp.Controller
                     }
                 }
             }
-        } //done - tu dong nhan dien loai account user/admin
+        }
 
         public void WithDraw(Account accountLogin)
         {
@@ -150,7 +150,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 Console.WriteLine(
                     "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }
-        } //done and connect
+        }
 
         public void Deposit(Account accountLogin)
         {
@@ -168,7 +168,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 Console.WriteLine(
                     "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }
-        } //done and connect
+        }
 
         public void Transfer(Account accountLogin)
         {
@@ -190,7 +190,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 Console.WriteLine(
                     "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }
-        } //done con loi khi chuyen cho tai khoan ko ton tai
+        }
 
         public void CheckInformation(Account accountLogin)
         {
@@ -202,13 +202,13 @@ namespace BankSystemAssignmentCSharp.Controller
             Console.WriteLine(updateAcc.ToString());
             Console.WriteLine(
                 "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        } //done
+        }
 
         public void CheckBalance(Account accountLogin)
         {
             var updateAcc = accountModel.FindById(accountLogin.AccountNumber);
             Console.WriteLine($"Your balance is: {updateAcc.Balance}");
-        } //done
+        }
 
         public void UpdateInformation(Account accountLogin)
         {
@@ -246,7 +246,7 @@ namespace BankSystemAssignmentCSharp.Controller
             {
                 Console.WriteLine("saving false, please try again !!!!");
             }
-        } //done
+        }
 
         public void ChangePassword(Account accountLogin)
         {
@@ -336,7 +336,7 @@ namespace BankSystemAssignmentCSharp.Controller
                     Console.WriteLine("Canceled !!!");
                 }
             }
-        } //done
+        }
 
         public void CheckTransactionHistory(Account accountLogin)
         {
@@ -380,6 +380,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 {
                     totalPage = transactionModel.CountNumberOffTransactionHistory() / limit + 1;
                 }
+
                 var result =
                     TransactionModel.FindTransactionHistoryByAccountNumber(accountLogin.AccountNumber, startTime,
                         endTime, offset, limit);
@@ -429,7 +430,7 @@ namespace BankSystemAssignmentCSharp.Controller
                         break;
                 }
             } while (!Console.KeyAvailable && key.Key != ConsoleKey.DownArrow);
-        } //done
+        }
 
         public void ShowAllUserAccount()
         {
@@ -449,6 +450,7 @@ namespace BankSystemAssignmentCSharp.Controller
                 {
                     totalPage = accountModel.CountAllAccount() / limit + 1;
                 }
+
                 var result = accountModel.FindAll(offset, limit);
 
                 if (result == null)

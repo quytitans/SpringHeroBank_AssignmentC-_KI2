@@ -42,12 +42,6 @@ namespace BankSystemAssignmentCSharp.Model
             {
                 return null;
             }
-            else if (account.LockTransaction == 1 || account.Status == 0 || account.Status == -1) //check khoa giao dich
-            {
-                Console.WriteLine("The account is not active, please contact the bank staff for processing !!!");
-                return null;
-            }
-
             using (var cnn = ConnectionHelperCSharp.GetConnection())
             {
                 cnn.Open();
@@ -82,7 +76,7 @@ namespace BankSystemAssignmentCSharp.Model
 
             return transactionHistoriesList;
         }
-
+        
         public TransactionHistory FinByID(string ID)
         {
             TransactionHistory transactionHistory1 = new TransactionHistory();
@@ -157,6 +151,7 @@ namespace BankSystemAssignmentCSharp.Model
         public int CountNumberOffTransactionHistory()
         {
             var count = 0;
+            List<TransactionHistory> transactionHistoriesList = new List<TransactionHistory>();
             using (var cnn = ConnectionHelperCSharp.GetConnection())
             {
                 cnn.Open();
@@ -176,6 +171,40 @@ namespace BankSystemAssignmentCSharp.Model
                 }
             }
 
+            return count;
+        }
+
+        public int CountNumberOffTransactionHistory(string accountNumber, string startTime, string endTime)
+        {
+            var count = 0;
+            List<TransactionHistory> transactionHistoriesList = new List<TransactionHistory>();
+            var startTimeConverted = ConvertStringDateTimeToMilisecond.ToMiliSecond(startTime);
+            var endTimeConverted = ConvertStringDateTimeToMilisecond.ToMiliSecond(endTime);
+            var account = AccountModel.FindById(accountNumber);
+            if (account == null)
+            {
+                return 0;
+            }
+            using (var cnn = ConnectionHelperCSharp.GetConnection())
+            {
+                cnn.Open();
+                MySqlCommand mySqlCommand =
+                    new MySqlCommand(
+                        $"select * from transactionhistory where " +
+                        $"SenderAccountNumber = '{accountNumber}' and " +
+                        $"CreateAt >= {startTimeConverted} and CreateAt <= {endTimeConverted}",
+                        cnn);
+                var result = mySqlCommand.ExecuteReader();
+                if (result == null)
+                {
+                    return 0;
+                }
+
+                while (result.Read())
+                {
+                    count++;
+                }
+            }
             return count;
         }
         //done

@@ -11,8 +11,18 @@ namespace BankSystemAssignmentCSharp.Model
     {
         public bool Save(Account account)
         {
+            AdminModel adminModel = new AdminModel();
             var checkExist = FindByUsername(account.Username);
+            //check ton tai trong bang user
             if (checkExist != null)
+            {
+                Console.WriteLine("Username already exist !!! Please try again !!!");
+                return false;
+            }
+
+            //check ton tai trong bang admin
+            var checkExist2 = adminModel.FindByUsername(account.Username);
+            if (checkExist2 != null)
             {
                 Console.WriteLine("Username already exist !!! Please try again !!!");
                 return false;
@@ -39,7 +49,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return false;
-        } //Done
+        } 
 
         public bool Update(string id, Account updateAccount)
         {
@@ -83,7 +93,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return false;
-        } //Done
+        } 
 
         public bool Delete(string id)
         {
@@ -107,7 +117,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return false;
-        } //Done
+        } 
 
         public Account FindById(string id)
         {
@@ -161,58 +171,54 @@ namespace BankSystemAssignmentCSharp.Model
 
         public List<Account> FindByName(string firstName, string lastName)
         {
-            List<Account> ListResult = new List<Account>();
+            var ListResult = new List<Account>();
             try
             {
                 using (var cnn = ConnectionHelperCSharp.GetConnection())
                 {
-                    Account account = new Account();
+                    
                     cnn.Open();
-                    string strQuerry =
-                        $"select * from bankdatabase where FirstName  = '{firstName}' and LastName = '{lastName}'";
+                    var strQuerry =
+                        $"SELECT * FROM bankdatabase WHERE FirstName  = '{firstName}' AND LastName = '{lastName}'";
                     MySqlCommand mySqlCommand = new MySqlCommand(strQuerry, cnn);
                     var result = mySqlCommand.ExecuteReader();
-                    if (!result.Read())
+                    
+                    while (result.Read())
                     {
-                        return null;
-                    }
-                    {
-                        while (result.Read())
+                        var account22 = new Account();
+                        account22.AccountNumber = result.GetString("AccountNumber");
+                        if (account22.AccountNumber.Equals(""))
                         {
-                            account.AccountNumber = result.GetString("AccountNumber");
-                            account.Type = result.GetInt32("Type");
-                            account.Balance = result.GetDouble("Balance");
-                            account.Username = result.GetString("Username");
-                            account.PasswordHash = result.GetString("PasswordHash");
-                            account.Salt = result.GetString("Salt");
-                            account.LockTransaction = result.GetInt32("LockTransaction");
-                            account.FirstName = result.GetString("FirstName");
-                            account.LastName = result.GetString("LastName");
-                            account.Dob = result.GetInt64("Dob");
-                            account.Gender = result.GetInt32("Gender");
-                            account.Email = result.GetString("Email");
-                            account.IdentityNumber = result.GetString("IdentityNumber");
-                            account.Phone = result.GetString("Phone");
-                            account.CreateAt = result.GetInt64("CreateAt");
-                            account.UpdateAt = result.GetInt64("UpdateAt");
-                            account.DeleteAt = result.GetInt64("DeleteAt");
-                            account.Status = result.GetInt32("Status");
-                            ListResult.Add(account);
+                            return null;
                         }
-
-                        return ListResult;
+                        account22.Type = result.GetInt32("Type");
+                        account22.Balance = result.GetDouble("Balance");
+                        account22.Username = result.GetString("Username");
+                        account22.PasswordHash = result.GetString("PasswordHash");
+                        account22.Salt = result.GetString("Salt");
+                        account22.LockTransaction = result.GetInt32("LockTransaction");
+                        account22.FirstName = result.GetString("FirstName");
+                        account22.LastName = result.GetString("LastName");
+                        account22.Dob = result.GetInt64("Dob");
+                        account22.Gender = result.GetInt32("Gender");
+                        account22.Email = result.GetString("Email");
+                        account22.IdentityNumber = result.GetString("IdentityNumber");
+                        account22.Phone = result.GetString("Phone");
+                        account22.CreateAt = result.GetInt64("CreateAt");
+                        account22.UpdateAt = result.GetInt64("UpdateAt");
+                        account22.DeleteAt = result.GetInt64("DeleteAt");
+                        account22.Status = result.GetInt32("Status");
+                        ListResult.Add(account22);
                     }
                 }
+                return ListResult;
             }
             catch (NullReferenceException e)
             {
                 Console.WriteLine("This user is not exist, please try again");
                 return null;
             }
-
-            return null;
         }
-        //done
 
         public Account FindByUsername(string username)
         {
@@ -262,7 +268,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return null;
-        } //done
+        }
 
         public List<Account> FindAll(int offset, int limit)
         {
@@ -270,7 +276,8 @@ namespace BankSystemAssignmentCSharp.Model
             using (var cnn = ConnectionHelperCSharp.GetConnection())
             {
                 cnn.Open();
-                MySqlCommand mySqlCommand = new MySqlCommand($"select * from bankdatabase LIMIT {limit} OFFSET {offset}", cnn);
+                MySqlCommand mySqlCommand =
+                    new MySqlCommand($"select * from bankdatabase LIMIT {limit} OFFSET {offset}", cnn);
                 var result = mySqlCommand.ExecuteReader();
                 if (result == null)
                 {
@@ -304,10 +311,9 @@ namespace BankSystemAssignmentCSharp.Model
 
             return listAcc;
         }
-
         public int CountAllAccount()
         {
-            int count=0;
+            int count = 0;
             using (var cnn = ConnectionHelperCSharp.GetConnection())
             {
                 cnn.Open();
@@ -323,10 +329,9 @@ namespace BankSystemAssignmentCSharp.Model
                     count++;
                 }
             }
+
             return count;
         }
-        //Done
-
         public List<Account> SearchByPhone(string keyword)
         {
             List<Account> lisAcc = new List<Account>();
@@ -378,7 +383,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return null;
-        } //Done
+        }
 
         public List<Account> SearchByIndentityNumber(string keyword)
         {
@@ -431,7 +436,7 @@ namespace BankSystemAssignmentCSharp.Model
             }
 
             return null;
-        } //Done
+        }
 
         public List<Account> SearchByStatus(int status, int offset, int limit)
         {
@@ -441,7 +446,8 @@ namespace BankSystemAssignmentCSharp.Model
                 using (var cnn = ConnectionHelperCSharp.GetConnection())
                 {
                     cnn.Open();
-                    string strQuerry = $"select * from bankdatabase where Status = {status} LIMIT {limit} OFFSET {offset}";
+                    string strQuerry =
+                        $"select * from bankdatabase where Status = {status} LIMIT {limit} OFFSET {offset}";
                     MySqlCommand mySqlCommand = new MySqlCommand(strQuerry, cnn);
                     var result = mySqlCommand.ExecuteReader();
                     if (result == null)
@@ -519,6 +525,5 @@ namespace BankSystemAssignmentCSharp.Model
 
             return 0;
         }
-        //Done
     }
 }

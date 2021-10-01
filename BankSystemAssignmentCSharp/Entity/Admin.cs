@@ -54,9 +54,10 @@ namespace BankSystemAssignmentCSharp.Entity
         {
             return ConvertMilisecondToStringDateTime.ConvertToStringDate(_deleteAt);
         }
+
         public string strStatus()
         {
-            if (Status ==1)
+            if (Status == 1)
             {
                 return "Active";
             }
@@ -75,8 +76,8 @@ namespace BankSystemAssignmentCSharp.Entity
                 return "Null";
             }
         }
-        //end convert block
 
+        //end convert block
         public Admin()
         {
         }
@@ -87,10 +88,11 @@ namespace BankSystemAssignmentCSharp.Entity
             Admin check;
             do
             {
-                Id = Guid.NewGuid().ToString(); //xu ly them khi co ham find admin by id
+                Id = Guid.NewGuid().ToString();
                 AdminModel adminModel = new AdminModel();
                 check = adminModel.FindById(Id);
             } while (check != null);
+
             Username = username;
             Salt = Hash.RandomString(6);
             Password = password;
@@ -104,11 +106,10 @@ namespace BankSystemAssignmentCSharp.Entity
             Status = 0; //1 là active, 2 là khóa, -1 là deleted, 0 : chuakichhoat
         }
 
-
         public override string ToString()
         {
             return
-                $"{Id,40}{ "|",2}{Username,15}{ "|",2}{FullName,15}{ "|",2}{Phone,12}{ "|",2}{strCreateAt(),15}{ "|",2}{strUpdateAt(),15}{ "|",2}{strDeleteAt(),15}{ "|",2}{strStatus(),8}";
+                $"{Id,40}{"|",2}{Username,15}{"|",2}{FullName,15}{"|",2}{Phone,12}{"|",2}{strCreateAt(),15}{"|",2}{strUpdateAt(),15}{"|",2}{strDeleteAt(),15}{"|",2}{strStatus(),8}";
         }
 
         //ma hoa password

@@ -47,22 +47,12 @@ namespace BankSystemAssignmentCSharp.View
                     case 4:
                         Console.WriteLine("Register New Customer Account");
                         var result = userController.Register();
-                        if (result != null)
-                        {
-                            Console.WriteLine("Register success, press any key then select UserMode to Login");
-                            Console.ReadLine();
-                        }
-
+                        Console.ReadLine();
                         break;
                     case 5:
                         Console.WriteLine("Register New Admin Account");
                         var result1 = adminController.CreateAdmin();
-                        if (result1 != null)
-                        {
-                            Console.WriteLine("Register success, press any key then select AdminMode to Login");
-                            Console.ReadLine();
-                        }
-
+                        Console.ReadLine();
                         break;
                 }
 
@@ -81,8 +71,8 @@ namespace BankSystemAssignmentCSharp.View
                 Console.WriteLine($"Welcom Admin {accountLogin.FullName} comeback");
                 Console.WriteLine("please select: ");
                 Console.WriteLine("1 - Your detail information"); //done
-                Console.WriteLine("2 - Approve account inactive"); 
-                Console.WriteLine("3 - Change user account status"); //done
+                Console.WriteLine("2 - Change user account status"); //done
+                Console.WriteLine("3 - Open/Lock user transaction"); //done
                 Console.WriteLine("4 - Show list account (Active, Inactive/Waiting Approve, Deleted)"); // PHAN TRANG
                 Console.WriteLine("5 - Find User info by ACCOUNT's NUMBER"); //done
                 Console.WriteLine("6 - Find User info by USER's NAME"); //done
@@ -105,17 +95,13 @@ namespace BankSystemAssignmentCSharp.View
                         Console.ReadLine();
                         break;
                     case 2:
-                        //show danh sach inactive account
-                        AdminController adminController2 = new AdminController();
-                        Console.WriteLine("List of inactive User Account");
-                        adminController2.FindUserByStatus(0);
-                        //lua chon AccountNumber to active
-                        adminController2.ChangeUserStatus();
+                        AdminController adminController3 = new AdminController();
+                        adminController3.ChangeUserStatus();
                         Console.ReadLine();
                         break;
                     case 3:
-                        AdminController adminController3 = new AdminController();
-                        adminController3.ChangeUserStatus();
+                        AdminController adminController16 = new AdminController();
+                        adminController16.ChangeLockTransaction();
                         Console.ReadLine();
                         break;
                     case 4:
@@ -172,6 +158,8 @@ namespace BankSystemAssignmentCSharp.View
                         adminController12.UpdateAdminAccount(accountLogin);
                         Console.ReadLine();
                         break;
+                    
+                    
                     case 13:
                         Console.WriteLine("Change Your Password");
                         AdminController adminController13 = new AdminController();

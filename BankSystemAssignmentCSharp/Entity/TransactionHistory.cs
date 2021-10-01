@@ -38,7 +38,6 @@ namespace BankSystemAssignmentCSharp.Entity
         public int Status { get; set; } // 1 successes, 2 process, 3 false
 
         //convert milisecond to string date time format
-
         public string StrCreateAt()
         {
             return ConvertMilisecondToStringDateTime.ConvertToStringDate(_createAt);
@@ -54,10 +53,9 @@ namespace BankSystemAssignmentCSharp.Entity
             return ConvertMilisecondToStringDateTime.ConvertToStringDate(_deleteAt);
         }
 
-
         public string strType()
         {
-            if (Type ==1)
+            if (Type == 1)
             {
                 return "Withdaw";
             }
@@ -74,12 +72,12 @@ namespace BankSystemAssignmentCSharp.Entity
             else
             {
                 return "Null";
-            } 
+            }
         }
-        
+
         public string strStatus()
         {
-            if (Status ==1)
+            if (Status == 1)
             {
                 return "Success";
             }
@@ -113,8 +111,8 @@ namespace BankSystemAssignmentCSharp.Entity
                 ID = Guid.NewGuid().ToString();
                 TransactionModel transactionModel = new TransactionModel();
                 check = transactionModel.FinByID(ID);
-
             } while (check != null);
+
             SenderAccountNumber = senderAccountNumber;
             ReceiverAccountNumber = receiverAccountNumber;
             Type = type;
